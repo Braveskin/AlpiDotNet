@@ -30,9 +30,12 @@ namespace AlpiDotNet
                     if (process == null) {
                         return "Could not start process.";
                     }
-                    var size = process.StandardOutput.ReadLine();
 
-                    return "Hello World! Size: " + size;
+                    var output = "";
+                    while (!process.StandardOutput.EndOfStream)
+                        output += process.StandardOutput.ReadLine();
+
+                    return "Hello World! Size: " + output;
                 }
                 catch (Exception ex) {
                     return "Error: " + ex.ToString();
