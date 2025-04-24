@@ -24,6 +24,7 @@ namespace AlpiDotNet
                 try {
                     var currentProcess = Process.GetCurrentProcess();
                     var processStart = new ProcessStartInfo("cat", "/proc/" + currentProcess.Id + "/smaps | grep -m 1 -e ^Size: | awk '{print $2}'");
+                    processStart.RedirectStandardOutput = true;
                     using var process = Process.Start(processStart);
                 
                     if (process == null) {
