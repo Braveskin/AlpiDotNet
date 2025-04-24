@@ -20,16 +20,23 @@ namespace AlpiDotNet
 
 
             app.MapGet("/", () => {
-                var currentProcess = Process.GetCurrentProcess();
-                var processStart = new ProcessStartInfo("cat", "/proc/" + currentProcess.Id + "/smaps | grep -m 1 -e ^Size: | awk '{print $2}'");
-                using var process = Process.Start(processStart);
-                
-                if (process == null) {
-                    return "Could not start process.";
-                }
-                var size = process.StandardOutput.ReadLine();
 
-                return "Hello World! Size: " + size;
+                try {
+                    var currentProcess = Process.GetCurrentProcess();
+                    var processStart = new ProcessStartInfo("cat", "/proc/" + currentProcess.Id + "/smaps | grep -m 1 -e ^Size: | awk '{print $2}'");
+                    using var process = Process.Start(processStart);
+                
+                    if (process == null) {
+                        return "Could not start process.";
+                    }
+                    var size = process.StandardOutput.ReadLine();
+
+                    return "Hello World! Size: " + size;
+                }
+                catch (Exception ex) {
+                    return "Error: " + ex.ToString();
+                }
+
             });
 
             app.Run();
