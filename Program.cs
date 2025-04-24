@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Reflection.PortableExecutable;
 
 namespace AlpiDotNet
@@ -15,7 +17,20 @@ namespace AlpiDotNet
             app.Urls.Add("http://*:5000");
 
 
-            app.MapGet("/", () => "Hello World!");
+
+
+            app.MapGet("/", () => {
+                var currentProcess = Process.GetCurrentProcess();
+                var processStart = new ProcessStartInfo("cat", "/proc/" + currentProcess.Id + "/smaps | grep -m 1 -e ^Size: | awk '{print $2}'");
+                using var process = Process.Start(processStart);
+                
+                if (process == null) {
+                    return "Could not start process.";
+                }
+                var size = process.StandardOutput.ReadLine();
+
+                return "Hello World! Size: " + size;
+            });
 
             app.Run();
         }
