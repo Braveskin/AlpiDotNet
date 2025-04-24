@@ -35,7 +35,7 @@ namespace AlpiDotNet
                     while (!process.StandardOutput.EndOfStream)
                         output += process.StandardOutput.ReadLine();
 
-                    return "Hello World! Size: " + output;
+                    return "Hello World! Process ID: " + currentProcess.Id + "; Size: " + output;
                 }
                 catch (Exception ex) {
                     return "Error: " + ex.ToString();
