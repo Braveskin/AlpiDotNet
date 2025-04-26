@@ -1,0 +1,5 @@
+
+// Path to Bulma's sass folder
+@use "bulma/sass" with (
+  $family-primary: 'sans-serif',
+);

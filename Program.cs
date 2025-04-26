@@ -1,6 +1,6 @@
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Reflection.PortableExecutable;
+
+using System.Net;
+using System.Net.WebSockets;
 
 namespace AlpiDotNet
 {
@@ -10,38 +10,35 @@ namespace AlpiDotNet
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
-            app.Urls.Add("http://*:80");
-            app.Urls.Add("http://*:5000");
+            
+            //app.Urls.Add("http://*:80");
+            //app.Urls.Add("http://*:5000");
+            //app.Urls.Add("http://*:5226");
 
 
+            app.UseStaticFiles();
+            app.UseRouting();
+            //app.UseWebSockets();
 
+            app.MapRazorPages();
+            app.MapControllers();
+            /*
+            app.Map("/ws", async ctx => {
 
-            app.MapGet("/", () => {
+                if (!ctx.WebSockets.IsWebSocketRequest) {
+                    ctx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return;
+                }
 
+                using var ws = await ctx.WebSockets.AcceptWebSocketAsync();
                 try {
-                    var currentProcess = Process.GetCurrentProcess();
-                    var processStart = new ProcessStartInfo("cat", "/proc/" + currentProcess.Id + "/smaps | grep -m 1 -e ^Size: | awk '{print $2}'");
-                    processStart.RedirectStandardOutput = true;
-                    using var process = Process.Start(processStart);
-                
-                    if (process == null) {
-                        return "Could not start process.";
-                    }
-
-                    var output = "";
-                    while (!process.StandardOutput.EndOfStream)
-                        output += process.StandardOutput.ReadLine();
-
-                    return "Hello World! Process ID: " + currentProcess.Id + "; Size: " + output;
+                    //await CameraController.HandleWebsocketConnectionAsync(ws);
                 }
-                catch (Exception ex) {
-                    return "Error: " + ex.ToString();
-                }
-
-            });
+                catch (WebSocketException) {}
+            });*/
 
             app.Run();
         }
