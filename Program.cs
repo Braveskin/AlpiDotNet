@@ -14,10 +14,8 @@ namespace AlpiDotNet
 
             var app = builder.Build();
             
-            //app.Urls.Add("http://*:80");
             //app.Urls.Add("http://*:5000");
-            //app.Urls.Add("http://*:5226");
-
+            app.Urls.Add("http://*:5226");
 
             app.UseStaticFiles();
             app.UseRouting();
